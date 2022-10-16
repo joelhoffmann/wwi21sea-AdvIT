@@ -25,8 +25,8 @@ public class Aufgabe1_b extends Thread{
     }
 
     public static void main(String[] args) {
-        new Aufgabe1_b(0, 6000).start();
-        new Aufgabe1_b(1,2000).start();
+        new Aufgabe1_b(0, 2000).start();
+        new Aufgabe1_b(1,5000).start();
     }
 
     @Override
