@@ -1,60 +1,69 @@
 package Testate.Aufgabe1;
 
+import java.sql.SQLOutput;
 import java.util.concurrent.Semaphore;
 
-public class Aufgabe1_a extends Thread{
-    public static Semaphore lock0 = new Semaphore(1,true);
-    public static Semaphore lock1 = new Semaphore(0,true);
-    public static Semaphore gleis = new Semaphore(1, true);
-    public static int ctr = 0;
+public class Aufgabe1_a extends Thread {
+
+    public static Semaphore empty = new Semaphore(1, true);
+    public static Semaphore full = new Semaphore(0, true);
+
     public int id;
-    public int speed;
+
+    public Aufgabe1_a(int id) {
+        this.id = id;
+    }
 
     public static void main(String[] args) {
-        new Aufgabe1_a(0, 5000).start();
-        new Aufgabe1_a(1, 2000).start();
+        new Aufgabe1_a(0).start();
+        new Aufgabe1_a(1).start();
     }
 
-    public Aufgabe1_a(int id, int speed){
-        this.id = id;
-        this.speed = speed;
-    }
+    @Override
+    public void run() {
+        while (true) {
 
-    public void run(){
-        while(true){
-        try {
-            System.out.println("Lok " + this.id + " fährt los");
-            Thread.sleep(speed * (2/3));
-            System.out.println("Lok " + this.id + " will über gemeinsames gleis");
-            if (ctr == 0) {
+            try {
                 if (this.id == 0) {
-                    lock0.acquire();
-                    System.out.println("Lok " + this.id + " fährt über gemeinsames gleis");
-                    Thread.sleep(speed * (1/3));
-                    System.out.println("Lok " + this.id + " verlässt das gemeinsames gleis");
-                    lock1.release();
-                    lock0.release();
-                    ctr++;
+                    Thread.sleep(200);
+                    this.enterLok1();
+                } else {
+                    Thread.sleep(2000);
+                    this.enterLok2();
                 }
-                if (this.id == 1) {
-                    lock1.acquire();
-                    System.out.println("Lok " + this.id + " fährt über gemeinsames gleis");
-                    Thread.sleep(speed * (1/3));
-                    System.out.println("Lok " + this.id + " verlässt das gemeinsames gleis");
-                    lock1.release();
-                    ctr++;
-                }
-            } else {
-                gleis.acquire();
-                System.out.println("Lok " + this.id + " fährt über gemeinsames gleis");
-                Thread.sleep(1000);
-                System.out.println("Lok " + this.id + " verlässt das gemeinsames gleis");
-                ctr++;
-                gleis.release();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+
         }
+    }
+
+    public void enterLok1() {
+
+        try {
+            empty.acquire();
+
+            System.out.println("0 fährt");
+            Thread.sleep(200);
+            System.out.println("0 raus");
+
+            full.release();
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void enterLok2() {
+        try {
+            full.acquire();
+            System.out.println("1 fährt");
+            Thread.sleep(500);
+            System.out.println("1 raus");
+            empty.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
