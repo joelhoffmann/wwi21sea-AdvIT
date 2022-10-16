@@ -1,69 +1,63 @@
 package Testate.Aufgabe1;
 
-import java.sql.SQLOutput;
 import java.util.concurrent.Semaphore;
 
-public class Aufgabe1_a extends Thread {
+public class Aufgabe1_a extends Thread{
 
-    public static Semaphore empty = new Semaphore(1, true);
-    public static Semaphore full = new Semaphore(0, true);
-
+    public static Semaphore mutex = new Semaphore(1,true);//gemeinsames Gleis
+    public static Semaphore empty = new Semaphore(0,true);//Verbaucher queue
     public int id;
-
-    public Aufgabe1_a(int id) {
-        this.id = id;
-    }
+    public int speed;//Geschwindigkeit des Zuges
 
     public static void main(String[] args) {
-        new Aufgabe1_a(0).start();
-        new Aufgabe1_a(1).start();
+        //Erstellung beider Züge
+        new Aufgabe1_a(0, 2000).start();
+        new Aufgabe1_a(1, 5000).start();
     }
 
-    @Override
-    public void run() {
-        while (true) {
+    public Aufgabe1_a(int id, int speed){
+        this.id = id;
+        this.speed = speed;
+    }
 
-            try {
-                if (this.id == 0) {
-                    Thread.sleep(200);
-                    this.enterLok1();
-                } else {
-                    Thread.sleep(2000);
-                    this.enterLok2();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public void run(){
+        while(true){
+        try {
+            //Lock fährt auf eigenem Gleis
+            Thread.sleep((long)(this.speed * 0.7)); // 0.7 -> länge des eigenen Gleises
+
+            //enter lok0 auf gemeinsames Gleis
+            if(this.id == 0){
+                mutex.acquire();
+
+                //KA
+                System.out.println("Lok: " +  this.id + " befährt das gleis");
+                Thread.sleep((long)(this.speed * 0.3));// 0.3 -> länge des gemeinsamen Gleises
+                System.out.println("Lok: " +  this.id + " verlässt das gleis");
+                //KA end
+
+                //exit lok0 vom gemeinsamen Gleis
+                empty.release();
+                mutex.release();
+
             }
+            //enter lok1 auf gemeinsames Gleis
+            else{
+                empty.acquire();
+                mutex.acquire();
 
-        }
-    }
+                //KA
+                System.out.println("Lok: " +  this.id + " befährt das gleis");
+                Thread.sleep((long)(this.speed * 0.3));// 0.3 -> länge des gemeinsamen Gleises
+                System.out.println("Lok: " +  this.id + " verlässt das gleis");
+                //KA end
 
-    public void enterLok1() {
-
-        try {
-            empty.acquire();
-
-            System.out.println("0 fährt");
-            Thread.sleep(200);
-            System.out.println("0 raus");
-
-            full.release();
-
-
+                //exit lok1 vom gemeinsamen Gleis
+                mutex.release();
+            }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    public void enterLok2() {
-        try {
-            full.acquire();
-            System.out.println("1 fährt");
-            Thread.sleep(500);
-            System.out.println("1 raus");
-            empty.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }
