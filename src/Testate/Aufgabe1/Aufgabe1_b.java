@@ -64,15 +64,6 @@ public class Aufgabe1_b extends Thread{
                 if(this.id == 1) {
                     zustand_zug[1] = 1;
                 }
-            }else{
-
-                if(zustand_zug[this.id_andererZug] != 2){
-                    zustand_zug[this.id] = 2;
-                    sem_zug[this.id].release();
-                }else{
-                    zustand_zug[this.id] = 1;
-                }
-
             }
 
             mutex.release();
@@ -91,9 +82,9 @@ public class Aufgabe1_b extends Thread{
             System.out.println("Lok: " +  this.id + " verlässt das gleis");
 
             //wenn anderer Zug wartet
-            if(zustand_zug[this.id_andererZug] == 1){
+            //if(zustand_zug[this.id_andererZug] == 1){
                 sem_zug[this.id_andererZug].release();
-            }
+            //}
             mutex.release();
         } catch (InterruptedException e) {
             e.printStackTrace();

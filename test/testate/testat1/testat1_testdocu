@@ -9,12 +9,8 @@ Log für Lok0 mit Geschwindigkeit > Lok1 Geschwindigkeit:
 
 Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
-Lok: 0 befährt das gleis
-Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
 Lok: 1 verlässt das gleis
-Lok: 0 befährt das gleis
-Lok: 0 verlässt das gleis
 Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
@@ -40,7 +36,6 @@ Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
 Lok: 1 verlässt das gleis
 
-=> nach Erzeuger(Lok0) Verbraucher(Lok1) Problem kann niemals Lok1 öfter das gemeinsame Gleis befahren als Lok0
 
 b)
 new Aufgabe1_b(0, 2000).start(); -> Lok0
@@ -50,12 +45,12 @@ Log für Lok0 mit Geschwindigkeit > Lok1 Geschwindigkeit:
 
 Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
-Lok: 0 befährt das gleis
-Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
 Lok: 1 verlässt das gleis
 Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
+Lok: 1 befährt das gleis
+Lok: 1 verlässt das gleis
 Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
@@ -72,12 +67,12 @@ Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
 Lok: 1 verlässt das gleis
-Lok: 1 befährt das gleis
-Lok: 1 verlässt das gleis
 Lok: 0 befährt das gleis
 Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
 Lok: 1 verlässt das gleis
+Lok: 0 befährt das gleis
+Lok: 0 verlässt das gleis
 Lok: 1 befährt das gleis
 Lok: 1 verlässt das gleis
 Lok: 0 befährt das gleis

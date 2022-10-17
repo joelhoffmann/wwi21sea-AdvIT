@@ -4,7 +4,7 @@ import java.util.concurrent.Semaphore;
 
 public class Aufgabe1_a extends Thread {
 
-    public static Semaphore mutex = new Semaphore(1, true);//gemeinsames Gleis
+    public static Semaphore full = new Semaphore(1, true);//gemeinsames Gleis
     public static Semaphore empty = new Semaphore(0, true);//Verbaucher queue
     public int id;
     public int speed;//Geschwindigkeit des Zuges
@@ -28,7 +28,7 @@ public class Aufgabe1_a extends Thread {
 
                 //enter lok0 auf gemeinsames Gleis
                 if (this.id == 0) {
-                    mutex.acquire();
+                    full.acquire();
 
                     //KA
                     System.out.println("Lok: " + this.id + " befährt das gleis");
@@ -38,13 +38,11 @@ public class Aufgabe1_a extends Thread {
 
                     //exit lok0 vom gemeinsamen Gleis
                     empty.release();
-                    mutex.release();
 
                 }
                 //enter lok1 auf gemeinsames Gleis
                 else {
                     empty.acquire();
-                    mutex.acquire();
 
                     //KA
                     System.out.println("Lok: " + this.id + " befährt das gleis");
@@ -53,7 +51,7 @@ public class Aufgabe1_a extends Thread {
                     //KA end
 
                     //exit lok1 vom gemeinsamen Gleis
-                    mutex.release();
+                    full.release();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
