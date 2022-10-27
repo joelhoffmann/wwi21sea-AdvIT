@@ -18,7 +18,7 @@ public class Aufgabe13_client {
                 DatagramSocket mySocket = new DatagramSocket();
                 byte[] myByte = message.getBytes(StandardCharsets.UTF_8);
 
-                mySocket.send(new DatagramPacket(myByte, myByte.length, InetAddress.getLocalHost(), 4999));
+                mySocket.send(new DatagramPacket(myByte, myByte.length, InetAddress.getByName("192.168.31.110"), 4999));
 
                 mySocket.close();
             } catch (SocketException e) {
