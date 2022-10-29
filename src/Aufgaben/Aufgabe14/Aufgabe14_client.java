@@ -39,5 +39,4 @@ public class Aufgabe14_client {
             }
         }
     }
-
 }

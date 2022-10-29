@@ -12,35 +12,36 @@ public class Aufgabe14_server {
 
     public static void main(String[] args) {
 
+        BufferedReader br;
+        byte[] myBuffer;
+        DatagramPacket myPacket;
+        String line_to_send = "";
+        ArrayList<String> list;
+
         try {
             DatagramSocket myServer = new DatagramSocket(5999);
-            BufferedReader br;
             while (true) {
-
-                byte[] myBuffer = new byte[65507];
-                DatagramPacket myPacket = new DatagramPacket(myBuffer, myBuffer.length);
+                myBuffer = new byte[65507];
+                myPacket = new DatagramPacket(myBuffer, myBuffer.length);
                 try {
                     myServer.receive(myPacket);
                     String input = new String(myBuffer, 0, myPacket.getLength());
                     if (input.contains("WRITE") | input.contains("READ")) {
-                        String test = "";
-                        if (input.contains("READ")) test = input.substring(5);
-                        if (input.contains("WRITE")) test = input.substring(6);
-                        System.out.println(test);
-                        String[] splitString = test.split(",");
-                        String fileURL = "/Users/joel/IdeaProjects/wwi21sea-AdvIT-Coding/src/Aufgaben/Aufgabe14/TextFiles/" + splitString[0];
+                        String working_string = "";
+                        if (input.contains("READ")) working_string = input.substring(5);
+                        if (input.contains("WRITE")) working_string = input.substring(6);
+                        String[] splitString = working_string.split(",");
 
+                        String fileURL = "/Users/joel/IdeaProjects/wwi21sea-AdvIT-Coding/src/Aufgaben/Aufgabe14/TextFiles/" + splitString[0];
                         File myFile = new File(fileURL);
                         br = new BufferedReader(new FileReader(myFile));
-                        //TODO what if line number > than file
 
                         if (input.contains("READ")) {
-
-                            String line_to_send = "";
 
                             for (int i = 0; i < Integer.parseInt(splitString[1]); i++) {
                                 line_to_send = br.readLine();
                             }
+
                             if (line_to_send != null) {
                                 myServer.send(new DatagramPacket(line_to_send.getBytes(StandardCharsets.UTF_8), line_to_send.getBytes().length, InetAddress.getLocalHost(), myPacket.getPort()));
                             } else {
@@ -48,8 +49,7 @@ public class Aufgabe14_server {
                                 myServer.send(new DatagramPacket(line_to_send.getBytes(StandardCharsets.UTF_8), line_to_send.getBytes().length, InetAddress.getLocalHost(), myPacket.getPort()));
                             }
                         } else if (input.contains("WRITE")) {
-                            System.out.println("write");
-                            ArrayList<String> list = new ArrayList<>();
+                            list = new ArrayList<>();
                             boolean breaker = true;
                             while (breaker) {
                                 list.add(br.readLine());
@@ -59,7 +59,7 @@ public class Aufgabe14_server {
                                 }
                             }
                             if (Integer.parseInt(splitString[1]) > list.size()) {
-                                String line_to_send = "line not available";
+                                line_to_send = "line not available";
                                 myServer.send(new DatagramPacket(line_to_send.getBytes(StandardCharsets.UTF_8), line_to_send.getBytes().length, InetAddress.getLocalHost(), myPacket.getPort()));
                             } else {
                                 list.set((Integer.parseInt(splitString[1]) - 1), splitString[2]);
@@ -68,7 +68,7 @@ public class Aufgabe14_server {
                                     printWriter.println(list.get(i));
                                 }
                                 printWriter.close();
-                                String line_to_send = "ok";
+                                line_to_send = "ok";
                                 myServer.send(new DatagramPacket(line_to_send.getBytes(StandardCharsets.UTF_8), line_to_send.getBytes().length, InetAddress.getLocalHost(), myPacket.getPort()));
                             }
                         }
