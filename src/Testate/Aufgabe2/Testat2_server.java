@@ -3,28 +3,30 @@ package Testate.Aufgabe2;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.Buffer;
-import java.nio.charset.Charset;
 import java.util.Random;
 
 public class Testat2_server {
     private static int DEFAULT_PORT = 7777;
-
     public static void main(String[] args) {
         Socket connection = null;
         try {
-
             ServerSocket server = new ServerSocket(DEFAULT_PORT);
             while (true) {
                 try {
                     connection = server.accept();
                     PrintWriter out = new PrintWriter(connection.getOutputStream()); //output stream to client
-                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream())); //input stream from client
-                    String message = in.readLine();
-                    String[] messageArray = message.split(" ");
-                    if (messageArray.length > 0) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream())); //input stream of server
 
-                        if (messageArray[0].contains("SAVE")) {
+                    //get message
+                    String message = in.readLine();
+                    String[] messageArray = null;
+                    if (message != null) {
+                        messageArray = message.split(" ");
+                    }
+
+                    if (messageArray != null && messageArray.length > 0) {
+                        //SAVE function
+                        if (messageArray[0].contains("SAVE") && messageArray.length > 1) {
                             //generate Key
                             String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                             StringBuilder sb = new StringBuilder();
@@ -40,42 +42,41 @@ public class Testat2_server {
                             out.println("KEY " + key);
 
                             //generate and write file
-                            File myFile = new File("/Users/joel/IdeaProjects/wwi21sea-AdvIT-Coding/src/Testate/Aufgabe2/Messages/" + key);
-                            FileWriter myWriter = new FileWriter(myFile);
-                            myWriter.write( message.substring(5));
+                            File myFile = new File("src/Testate/Aufgabe2/Messages/" + key);
+                            PrintWriter myWriter = new PrintWriter(new FileWriter(myFile));
+                            myWriter.write(message.substring(5));
                             myWriter.close();
 
-                        } else if (messageArray[0].contains("GET")) {
-                            String fileUrl = "/Users/joel/IdeaProjects/wwi21sea-AdvIT-Coding/src/Testate/Aufgabe2/Messages/" + messageArray[1];
+                        }
+                        //GET function
+                        else if (messageArray[0].contains("GET") && messageArray.length > 1) {
+                            String fileUrl = "src/Testate/Aufgabe2/Messages/" + messageArray[1];
                             File myFile = new File(fileUrl);
 
-                            if(myFile.exists()){
+                            if (myFile.exists()) {
                                 BufferedReader myReader = new BufferedReader(new FileReader(myFile));
                                 out.println("OK " + myReader.readLine());
-                            }else{
+                            } else {
                                 out.println("FAILED");
                             }
 
+                        }
+                        //Catch if input is not valid
+                        else if (messageArray.length == 1) {
+                            out.println("command needs attributes");
                         } else {
-                            out.println("command not possible -> requiers SAVE ore GET");
+                            out.println("command not possible -> requires SAVE ore GET");
                         }
                         out.flush();
                     }
-                }finally {
-                    if(connection != null) connection.close();
+                } finally {
+                    // for Non-Persistent Server
+                    if (connection != null) connection.close();
                 }
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
 
     }

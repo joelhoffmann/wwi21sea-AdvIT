@@ -9,31 +9,28 @@ import java.net.Socket;
 
 public class Testat2_client {
     public static void main(String[] args) {
-        try {
-            Socket s = new Socket("localhost", 7777);
-
-            BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
-
-            BufferedReader networkIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            PrintWriter networkOut = new PrintWriter(s.getOutputStream());
+            Socket s;
+            BufferedReader userIn ;
+            BufferedReader networkIn;
+            PrintWriter networkOut;
 
             try {
 
                 while (true){
-                    String theLine = userIn.readLine();
-                    if(theLine.equals(".")) break;
-                    networkOut.println(theLine);
+                    s = new Socket("localhost", 7777);
+                    userIn = new BufferedReader(new InputStreamReader(System.in));
+                    networkIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                    networkOut = new PrintWriter(s.getOutputStream());
+                    String line = userIn.readLine();
+                    networkOut.println(line);
                     networkOut.flush();
                     System.out.println(networkIn.readLine());
-                    break;
+                    s.close();
                 }
 
             }catch (Exception e){
                 System.out.println(e);
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
