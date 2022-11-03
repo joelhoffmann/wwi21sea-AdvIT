@@ -11,12 +11,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Aufgabe15_server extends Thread {
-    private byte[] myBuffer;
     private DatagramPacket myPacket;
     private DatagramSocket myServer;
 
-    public Aufgabe15_server(byte[] myBuffer, DatagramSocket myServer, DatagramPacket myPacket) {
-        this.myBuffer = myBuffer;
+    public Aufgabe15_server( DatagramSocket myServer, DatagramPacket myPacket) {
         this.myPacket = myPacket;
         this.myServer = myServer;
     }
@@ -30,8 +28,7 @@ public class Aufgabe15_server extends Thread {
             ArrayList<String> list;
             String[] splitString;
             BufferedReader br;
-
-            String input = new String(myBuffer, 0, myPacket.getLength());
+            String input = new String(myPacket.getData(), 0, myPacket.getLength());
 
             if (input.startsWith("WRITE") | input.startsWith("READ")) {
 
@@ -107,7 +104,7 @@ public class Aufgabe15_server extends Thread {
                 myBuffer = new byte[65507];
                 myPacket = new DatagramPacket(myBuffer, myBuffer.length);
                 myServer.receive(myPacket);
-                new Aufgabe15_server(myBuffer, myServer, myPacket).start(); //start thread
+                new Aufgabe15_server(myServer, myPacket).start(); //start thread
 
             }
         } catch (Exception e) {
