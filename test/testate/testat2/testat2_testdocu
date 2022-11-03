@@ -1,0 +1,24 @@
+Testdokumentation Testat 2 von Adrian Nikaeen und Joel Hoffmann
+
+Wenn nur der der Befehl (SAVE oder GET) ohne ein folgendes Attribut ausgeführt wird, erhält man die Fehlermeldung ("command needs attributes") (Beispiel 1,5).
+Wenn der Befehl SAVE mit einem entsprechenden Text eingegeben wird, wird dieser in einer File gespeichert und der Schlüssel zurückgegeben (Beispiel 2).
+Wenn der Befehl GET mit einem vorhanden Schlüssel ausgeführt wird, erhält man den Inhalt der entsprechenden File (Beispiel 3).
+Wenn der Befehl GET mit einem nicht vorhandenen Schlüssel ausgeführt wird, wir die Fehlermeldung ausgegeben (Beispiel 4).
+
+Damit sind alle Eingabemöglichkeiten abgedeckt.
+
+Zur Übersicht sind hier die Return-Ausgaben mit einem Pfeil (->) davor versehen.
+Jeder ausgeführte Befehl ist hier nummeriert.
+
+Beides ist in der normalen Konsolenausgabe nicht der Fall.
+
+(1) SAVE
+ -> command needs attributes
+(2) SAVE das ist ein test
+ -> KEY IVQOXHPKEFHZIGJM
+(3) GET IVQOXHPKEFHZIGJM
+ -> OK das ist ein test
+(4) GET IVQOXHPKEFHZIGJN
+-> FAILED
+(5) GET
+-> command needs attributes
