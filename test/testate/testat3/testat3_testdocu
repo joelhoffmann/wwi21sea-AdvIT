@@ -1,0 +1,59 @@
+Testdokumentation Testat 3 von Adrian Nikaeen und Joel Hoffmann
+
+Inhalt der Datei myFile.txt -> angegebene zeilennummer nicht mit in der Datei
+(1) Hello
+(2) World
+(3) This
+(4) is
+(5) a
+(6) test
+
+Allgemein dauert durch Thread.sleep ein WRITE Befehl 10 Sekunden und ein READ Befehl 3 Sekunden
+
+Wenn ein nicht hinterlegter Befehl ausgeführt wird, wird eine Fehlermeldung ausgegeben (Beispiel 1)
+Wenn ein vorhandener Befehl mit falschen Attributen abgeschickt wird, wird eine Fehlermeldung ausgegeben (Beispiel 2,3)
+Wenn der READ Befehl richtig ausgeführt wird, erhält man das passende Ergebnis (Beispiel 4, vgl. oben geschilderte myFile.txt)
+Wenn der WRTIE Befehl richtig ausgeführt wird, erhält man das passende Ergebnis (Beispiel 5, bestätigt durch Beispiel 6)
+Beispiel 7 von Client 1 wurde wenige Augenblicke vor Beispiel 1 von Client 2 ausgeführt und zeigt, dass das Leser-Schreiber-Problem behoben ist (vgl Timestamps der Ausgaben)
+-> WRITE wird vor READ ausgeführt.
+Beispiel 8 von Client 1 wurde wenige Augenblicke vor Beispiel 2 von Client 2 ausgeführt und zeigt, dass die Leser parallel arbeiten können (vgl Timestamps der Ausgaben)
+Beispiel 9 von Client 1 wurde wenige Augenblicke vor Beispiel 3 von Client 2 ausgeführt und zeigt, dass der Schreiber warten muss, wenn noch ein Leser aktiv ist.
+
+
+Damit sind alle Eingabemöglichkeiten abgedeckt.
+
+Zur Übersicht sind hier die Return-Ausgaben mit einem Pfeil (->) davor versehen.
+Jeder ausgeführte Befehl ist hier nummeriert.
+
+Beides ist in der normalen Konsolenausgabe nicht der Fall.
+
+Client 1
+
+(1) Something else
+ -> befehl nicht möglich -> READ or WRITE required
+(2) READ
+ -> missing attributes
+(3) WRITE
+ -> missing attributes
+(4) READ myFile.txt,1
+ -> Hello || Timestamp 2022-11-07 19:27:20.033
+(5) WRITE myFile.txt,1,Test
+ -> ok || Timestamp: 2022-11-07 19:28:01.041
+(6) READ myFile.txt,1
+ -> Test || Timestamp 2022-11-07 19:28:29.551
+(7) WRITE myFile.txt,1,Hello
+ -> ok || Timestamp: 2022-11-07 19:29:01.925
+(8) READ myFile.txt,1
+ -> Hello || Timestamp 2022-11-07 19:30:06.624
+(9) READ myFile.txt,1
+ -> Hello || Timestamp 2022-11-07 19:40:44.687
+
+Client 2
+
+(1) READ myFile.txt,1
+ -> Hello || Timestamp 2022-11-07 19:29:14.934
+(2) READ myFile.txt,1
+ -> Hello || Timestamp 2022-11-07 19:30:07.035
+(3) WRITE myFile.txt,1,Test
+ -> ok || Timestamp: 2022-11-07 19:40:44.693
+

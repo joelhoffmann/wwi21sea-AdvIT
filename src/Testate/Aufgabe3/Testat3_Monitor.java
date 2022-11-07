@@ -2,32 +2,16 @@ package Testate.Aufgabe3;
 
 public class Testat3_Monitor {
 
-    //Monitor nach Schreiberprio
-
-    /*
-
-    Wenn jemand lesen möchte -> schriebt jemand oder möchte jemand schrieben ?
-        -> Wenn nein dann lesen
-        -> Wenn ja dann warten bis niemand mehr schreiben möchte
-
-    Wenn jemand schreiben möchte -> schreibt jemand oder liest jemand ?
-        -> Wenn nein dann schreiben
-        -> Wenn ja, dann warten
-
-    -> entsprechend blockieren
-
-    */
-
     int[] states = new int[5];
     // 0 -> nix
-    // 1 -> will lesen
+    // 1 -> will lesen -> eigentlich unnötig
     // 2 -> will schreiben
     // 3 -> liest
     // 4 -> schreibt
 
     public Testat3_Monitor() {
 
-        for (int i = 0; i < states.length; i++){
+        for (int i = 0; i < states.length; i++) {
             states[i] = 0;
         }
 
@@ -75,18 +59,13 @@ public class Testat3_Monitor {
         notifyAll();
     }
 
+    //helper function
     public boolean containsButNotMe(int[] array, int number, int id) {
         boolean result = false;
-
         for (int i = 0; i < array.length; i++) {
-
             if (i != id && array[i] == number) result = true;
-
         }
-
         return result;
-
     }
-
 
 }
