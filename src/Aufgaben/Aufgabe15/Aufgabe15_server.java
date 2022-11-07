@@ -14,7 +14,7 @@ public class Aufgabe15_server extends Thread {
     private DatagramPacket myPacket;
     private DatagramSocket myServer;
 
-    public Aufgabe15_server( DatagramSocket myServer, DatagramPacket myPacket) {
+    public Aufgabe15_server(DatagramSocket myServer, DatagramPacket myPacket) {
         this.myPacket = myPacket;
         this.myServer = myServer;
     }
@@ -22,7 +22,7 @@ public class Aufgabe15_server extends Thread {
     @Override
     public void run() {
         try {
-            Thread.sleep((long) (Math.random() * 10000)); // waiting random time
+            //Thread.sleep((long) (Math.random() * 10000)); // waiting random time
 
             String line_to_send = "";
             ArrayList<String> list;
@@ -35,7 +35,7 @@ public class Aufgabe15_server extends Thread {
                 if (input.startsWith("READ")) splitString = input.substring(5).split(",");
                 else splitString = input.substring(6).split(",");
 
-                String fileURL = "/Users/joel/IdeaProjects/wwi21sea-AdvIT-Coding/src/Aufgaben/Aufgabe14/TextFiles/" + splitString[0];
+                String fileURL = "src/Aufgaben/Aufgabe14/TextFiles/" + splitString[0];
                 File myFile = new File(fileURL);
                 br = new BufferedReader(new FileReader(myFile));
 
@@ -87,8 +87,6 @@ public class Aufgabe15_server extends Thread {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             System.out.println(e);
         }
